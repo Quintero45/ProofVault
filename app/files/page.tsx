@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useAccount } from "wagmi";
 import { toast } from "sonner";
+import Logo from "@/public/assets/Logo.svg";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
@@ -152,44 +153,48 @@ export default function FilesPage() {
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
       {/* Navbar */}
-<nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto w-full relative">
-  {/* Logo */}
-  <Link href="/" className="flex items-center">
-    <Image
-      src="/assets/Logo.svg"
-      alt="ProofVault Logo"
-      width={100}
-      height={40}
-      className="cursor-pointer"
-    />
-  </Link>
+      <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto w-full">
+        {/* Logo */}
+        <Link href="/" className="flex items-center">
+          <Image
+            src={Logo}
+            alt="ProofVault Logo"
+            width={100}
+            height={40}
+            className="cursor-pointer"
+          />
+        </Link>
 
-  {/* Hamburger for mobile */}
-  <button
-    className="lg:hidden text-white text-xl"
-    onClick={() => setMenuOpen((prev) => !prev)}
-  >
-    ☰
-  </button>
+        {/* Hamburger for mobile */}
+        <button
+          className="lg:hidden text-white text-xl"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          ☰
+        </button>
 
-  {/* Desktop links */}
-  <div className="hidden lg:flex items-center space-x-6">
-    <Link href="/" className="hover:text-gray-400 text-sm">Home</Link>
-    <Link href="/about" className="hover:text-gray-400 text-sm">About Us</Link>
-    <Link href="/files" className="hover:text-gray-400 text-sm">Files</Link>
+        {/* Nav links desktop */}
+        <div className="hidden lg:flex items-center space-x-8">
+          <Link href="/" className="hover:text-gray-400 text-sm">Home</Link>
+          <Link href="/about" className="hover:text-gray-400 text-sm">About Us</Link>
+          <Link href="/files" className="hover:text-gray-400 text-sm">Files</Link>
+        </div>
+
+        {/* Wallet Connect */}
+        <div className="hidden lg:block">
+          {mounted && <ConnectButton />}
+        </div>
+      </nav>
+
+      {/* Mobile dropdown */}
+      {menuOpen && (
+  <div className="absolute right-0 top-16 bg-black w-60 py-4 px-6 flex flex-col items-end space-y-4 shadow-lg rounded-bl-xl z-50 lg:hidden">
+    <Link href="/" onClick={() => setMenuOpen(false)} className="hover:text-gray-400">Home</Link>
+    <Link href="/about" onClick={() => setMenuOpen(false)} className="hover:text-gray-400">About Us</Link>
+    <Link href="/files" onClick={() => setMenuOpen(false)} className="hover:text-gray-400">Files</Link>
     {mounted && <ConnectButton />}
   </div>
-
-  {/* Mobile dropdown aligned right */}
-  {menuOpen && (
-    <div className="absolute right-0 top-16 bg-black w-60 py-4 px-6 flex flex-col items-end space-y-4 shadow-lg rounded-bl-xl z-50 lg:hidden">
-      <Link href="/" onClick={() => setMenuOpen(false)} className="hover:text-gray-400">Home</Link>
-      <Link href="/about" onClick={() => setMenuOpen(false)} className="hover:text-gray-400">About Us</Link>
-      <Link href="/files" onClick={() => setMenuOpen(false)} className="hover:text-gray-400">Files</Link>
-      {mounted && <ConnectButton />}
-    </div>
-  )}
-</nav>
+)}
 
 
       {/* Main */}

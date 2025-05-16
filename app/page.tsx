@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import Logo from "@/public/assets/Logo.svg"
 import Link from "next/link";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useEnsName } from "wagmi";
@@ -9,7 +10,6 @@ import { useAccount, useEnsName } from "wagmi";
 export default function Home() {
   const { address, isConnected } = useAccount();
   const { data: ensName } = useEnsName({ address });
-
   const [mounted, setMounted] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -22,7 +22,7 @@ export default function Home() {
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <Image
-            src="/assets/Logo.svg"
+            src={Logo}
             alt="ProofVault Logo"
             width={100}
             height={40}
