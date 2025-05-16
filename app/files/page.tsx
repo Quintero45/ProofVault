@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useAccount } from "wagmi";
 import { toast } from "sonner";
-import Logo from "@/public/assets/Logo.svg";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
@@ -157,7 +156,7 @@ export default function FilesPage() {
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <Image
-            src={Logo}
+            src="/Logo.svg"
             alt="ProofVault Logo"
             width={100}
             height={40}

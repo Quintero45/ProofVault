@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Logo from "@/public/assets/Logo.svg"
 import Link from "next/link";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useAccount, useEnsName } from "wagmi";
@@ -22,7 +21,7 @@ export default function Home() {
         {/* Logo */}
         <Link href="/" className="flex items-center">
           <Image
-            src={Logo}
+            src="/Logo.svg"
             alt="ProofVault Logo"
             width={100}
             height={40}
