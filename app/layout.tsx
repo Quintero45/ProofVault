@@ -1,9 +1,9 @@
-import './theme.css';
-import '@coinbase/onchainkit/styles.css';
-import type { Metadata, Viewport } from 'next';
-import './globals.css';
-import { Providers } from './providers';
-
+import "./theme.css";
+import "@coinbase/onchainkit/styles.css";
+import "./globals.css";
+import { Providers } from "./providers";
+import { Toaster } from "sonner";
+import type { Metadata, Viewport } from "next";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -37,13 +37,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
       <body className="bg-background">
-        <Providers>{children}</Providers>
+        <Providers>
+          <Toaster position="top-center" richColors />
+          {children}
+        </Providers>
       </body>
     </html>
   );

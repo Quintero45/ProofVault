@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useAccount } from "wagmi";
+import { toast } from "sonner";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import Image from "next/image";
 import Link from "next/link";
@@ -46,7 +47,9 @@ export default function FilesPage() {
     const arrayBuffer = await file.arrayBuffer();
     const hashBuffer = await crypto.subtle.digest("SHA-256", arrayBuffer);
     const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hexHash = hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+    const hexHash = hashArray
+      .map((b) => b.toString(16).padStart(2, "0"))
+      .join("");
     setFileHash(hexHash);
   };
 
@@ -93,20 +96,25 @@ export default function FilesPage() {
     try {
       const hashHex = fileHash.startsWith("0x") ? fileHash : "0x" + fileHash;
       const tx = await registerProof(hashHex);
-      console.log("TX:", tx.transactionHash);
+      toast.success("✅ File successfully registered");
       await refreshHistory();
-    } catch (err) {
+    } catch (err: any) {
+      const message =
+        err?.message?.includes("already registered") ||
+        err?.data?.message?.includes("revert")
+          ? "⚠️ This file is already registered."
+          : "❌ Error registering file";
+      toast.error(message);
       console.error(err);
-      alert("❌ Error registering file");
     }
   };
 
   const copyToClipboard = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text);
-      alert("🔗 Hash copied to clipboard");
+      toast("🔗 Hash copied to clipboard", { duration: 2000 });
     } catch (err) {
-      alert("❌ Failed to copy hash");
+      toast.error("❌ Failed to copy hash");
     }
   };
 
@@ -122,7 +130,7 @@ export default function FilesPage() {
 
       const proofs = await getProofs(owner);
       const proof = proofs.find(
-        (p: any) => p.fileHash.toLowerCase() === hash.toLowerCase()
+        (p: any) => p.fileHash.toLowerCase() === hash.toLowerCase(),
       );
       if (proof) {
         setSearchResult({
@@ -152,12 +160,23 @@ export default function FilesPage() {
           className="w-28 sm:w-32 md:w-36"
         />
         <div className="flex items-center space-x-6">
-          <Link href="/" className="hover:text-gray-400 text-sm sm:text-base">Home</Link>
-          <Link href="#" className="hover:text-gray-400 text-sm sm:text-base">About Us</Link>
-          <Link href="/files" className="hover:text-gray-400 text-sm sm:text-base">Files</Link>
+          <Link href="/" className="hover:text-gray-400 text-sm sm:text-base">
+            Home
+          </Link>
+          <Link href="#" className="hover:text-gray-400 text-sm sm:text-base">
+            About Us
+          </Link>
+          <Link
+            href="/files"
+            className="hover:text-gray-400 text-sm sm:text-base"
+          >
+            Files
+          </Link>
         </div>
         <div className="flex justify-end w-full sm:w-auto">
-          {mounted && <ConnectButton showBalance={true} accountStatus="avatar" />}
+          {mounted && (
+            <ConnectButton showBalance={true} accountStatus="avatar" />
+          )}
         </div>
       </nav>
 
@@ -167,7 +186,12 @@ export default function FilesPage() {
         <div className="border border-blue-400 rounded-xl p-6 text-center">
           <h2 className="text-2xl font-bold">Drag your file</h2>
           <p className="text-sm mb-4">or click here</p>
-          <input ref={fileInputRef} type="file" onChange={handleFileChange} className="mb-4" />
+          <input
+            ref={fileInputRef}
+            type="file"
+            onChange={handleFileChange}
+            className="mb-4"
+          />
           <p className="text-xs text-gray-400 mb-4 sm:mt-4">
             Your file will not be uploaded. Only a hash will be generated.
           </p>
@@ -232,7 +256,8 @@ export default function FilesPage() {
             <div className="mt-6">
               <h3 className="font-bold text-sm">RESULT</h3>
               <p className="text-sm">
-                Timestamp: {new Date(searchResult.timestamp * 1000).toLocaleString()}
+                Timestamp:{" "}
+                {new Date(searchResult.timestamp * 1000).toLocaleString()}
               </p>
               <p className="text-sm">Basename: {searchResult.owner}</p>
               <p className="text-sm text-green-400">✅ File exists onchain</p>
@@ -243,7 +268,9 @@ export default function FilesPage() {
 
       {/* History Table */}
       <section className="max-w-6xl mx-auto px-4 py-1">
-        <h2 className="text-center text-xl font-bold mb-4">REGISTRATION HISTORY</h2>
+        <h2 className="text-center text-xl font-bold mb-4">
+          REGISTRATION HISTORY
+        </h2>
         <div className="overflow-x-auto">
           <table className="min-w-full text-left border-collapse border-t border-white/20">
             <thead>
@@ -256,7 +283,7 @@ export default function FilesPage() {
             </thead>
             <tbody>
               {history.length > 0 ? (
-                history.map((item, index) => (
+                [...history].reverse().map((item, index) => (
                   <tr key={index} className="border-b border-white/10">
                     <td className="p-2">{item.fileHash.slice(0, 10)}...</td>
                     <td className="p-2">
