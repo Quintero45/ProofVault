@@ -2,7 +2,7 @@
 
 import { ReactNode, useState } from "react";
 import { createConfig, http, WagmiConfig } from "wagmi";
-import { base } from "wagmi/chains";
+import { baseSepolia } from "wagmi/chains"; // ✅ Usa la red Testnet correcta
 import {
   RainbowKitProvider,
   getDefaultWallets
@@ -14,17 +14,18 @@ import {
   QueryClientProvider
 } from "@tanstack/react-query";
 
-// Asegúrate de tener este valor en tu .env.local
+// Obtiene los conectores con tu Project ID de WalletConnect
 const { connectors } = getDefaultWallets({
   appName: "ProofVault",
-  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!, // ← ¡clave real aquí!
+  projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
 });
 
+// Configura wagmi para Base Sepolia
 const config = createConfig({
-  chains: [base],
+  chains: [baseSepolia],
   connectors,
   transports: {
-    [base.id]: http(),
+    [baseSepolia.id]: http(), // 👈 transporte correcto para testnet
   },
   ssr: true,
 });
@@ -38,7 +39,7 @@ export function Providers({ children }: { children: ReactNode }) {
         <RainbowKitProvider>
           <MiniKitProvider
             apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
-            chain={base}
+            chain={baseSepolia} // ✅ Testnet en MiniKit
             config={{
               appearance: {
                 mode: "auto",

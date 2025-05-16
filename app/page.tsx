@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -9,9 +10,11 @@ export default function Home() {
   const { address, isConnected } = useAccount();
   const { data: ensName } = useEnsName({ address });
 
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+
   return (
     <div className="relative min-h-screen bg-black text-white flex flex-col overflow-hidden">
-
       {/* Navbar */}
       <nav className="flex flex-col sm:flex-row items-center justify-between px-6 py-4 max-w-7xl mx-auto w-full space-y-4 sm:space-y-0">
         <Link href="/">
@@ -23,7 +26,7 @@ export default function Home() {
           <Link href="/files" className="hover:text-gray-400 text-sm sm:text-base">Files</Link>
         </div>
         <div className="self-start sm:self-auto">
-          <ConnectButton />
+          {mounted && <ConnectButton />}
         </div>
       </nav>
 
@@ -39,7 +42,7 @@ export default function Home() {
           Register proof of authorship, existence, or integrity of any file on the blockchain—without revealing its content or needing lawyers. Generate a verifiable cryptographic receipt in seconds.
         </p>
 
-        {/* Bienvenida con ENS o address */}
+        {/* Welcome message */}
         {isConnected && (
           <>
             <h2 className="text-base sm:text-lg md:text-xl font-bold mb-3">
@@ -55,7 +58,7 @@ export default function Home() {
         )}
       </main>
 
-      {/* Fondo SVG */}
+      {/* Background SVG */}
       <Image
         src="/assets/LooperBG.svg"
         alt="Fondo Looper"
