@@ -9,6 +9,7 @@ import Link from "next/link";
 import { registerProof, ownerOfHash, getProofs } from "@/lib/proofVault";
 
 export default function FilesPage() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const { address, isConnected } = useAccount();
   const [mounted, setMounted] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -151,34 +152,45 @@ export default function FilesPage() {
   return (
     <div className="relative min-h-screen bg-black text-white overflow-hidden">
       {/* Navbar */}
-      <nav className="flex flex-col sm:flex-row items-center justify-between px-6 py-4 max-w-7xl mx-auto w-full gap-y-4 sm:gap-y-0">
-        <Image
-          src="/assets/Logo.svg"
-          alt="ProofVault Logo"
-          width={100}
-          height={60}
-          className="w-28 sm:w-32 md:w-36"
-        />
-        <div className="flex items-center space-x-6">
-          <Link href="/" className="hover:text-gray-400 text-sm sm:text-base">
-            Home
-          </Link>
-          <Link href="#" className="hover:text-gray-400 text-sm sm:text-base">
-            About Us
-          </Link>
-          <Link
-            href="/files"
-            className="hover:text-gray-400 text-sm sm:text-base"
-          >
-            Files
-          </Link>
-        </div>
-        <div className="flex justify-end w-full sm:w-auto">
-          {mounted && (
-            <ConnectButton showBalance={true} accountStatus="avatar" />
-          )}
-        </div>
-      </nav>
+<nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto w-full relative">
+  {/* Logo */}
+  <Link href="/" className="flex items-center">
+    <Image
+      src="/assets/Logo.svg"
+      alt="ProofVault Logo"
+      width={100}
+      height={40}
+      className="cursor-pointer"
+    />
+  </Link>
+
+  {/* Hamburger for mobile */}
+  <button
+    className="lg:hidden text-white text-xl"
+    onClick={() => setMenuOpen((prev) => !prev)}
+  >
+    ☰
+  </button>
+
+  {/* Desktop links */}
+  <div className="hidden lg:flex items-center space-x-6">
+    <Link href="/" className="hover:text-gray-400 text-sm">Home</Link>
+    <Link href="/about" className="hover:text-gray-400 text-sm">About Us</Link>
+    <Link href="/files" className="hover:text-gray-400 text-sm">Files</Link>
+    {mounted && <ConnectButton />}
+  </div>
+
+  {/* Mobile dropdown aligned right */}
+  {menuOpen && (
+    <div className="absolute right-0 top-16 bg-black w-60 py-4 px-6 flex flex-col items-end space-y-4 shadow-lg rounded-bl-xl z-50 lg:hidden">
+      <Link href="/" onClick={() => setMenuOpen(false)} className="hover:text-gray-400">Home</Link>
+      <Link href="/about" onClick={() => setMenuOpen(false)} className="hover:text-gray-400">About Us</Link>
+      <Link href="/files" onClick={() => setMenuOpen(false)} className="hover:text-gray-400">Files</Link>
+      {mounted && <ConnectButton />}
+    </div>
+  )}
+</nav>
+
 
       {/* Main */}
       <main className="max-w-6xl mx-auto px-4 py-12 grid grid-cols-1 lg:grid-cols-2 gap-10">

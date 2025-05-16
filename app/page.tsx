@@ -11,24 +11,55 @@ export default function Home() {
   const { data: ensName } = useEnsName({ address });
 
   const [mounted, setMounted] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
+
   useEffect(() => setMounted(true), []);
 
   return (
     <div className="relative min-h-screen bg-black text-white flex flex-col overflow-hidden">
       {/* Navbar */}
-      <nav className="flex flex-col sm:flex-row items-center justify-between px-6 py-4 max-w-7xl mx-auto w-full space-y-4 sm:space-y-0">
-        <Link href="/">
-          <Image src="/assets/Logo.svg" alt="ProofVault Logo" width={100} height={10} className="w-28 sm:w-32 md:w-36 cursor-pointer" />
+      <nav className="flex items-center justify-between px-6 py-4 max-w-7xl mx-auto w-full">
+        {/* Logo */}
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/assets/Logo.svg"
+            alt="ProofVault Logo"
+            width={100}
+            height={40}
+            className="cursor-pointer"
+          />
         </Link>
-        <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-8">
-          <Link href="/" className="hover:text-gray-400 text-sm sm:text-base">Home</Link>
-          <Link href="#" className="hover:text-gray-400 text-sm sm:text-base">About Us</Link>
-          <Link href="/files" className="hover:text-gray-400 text-sm sm:text-base">Files</Link>
+
+        {/* Hamburger for mobile */}
+        <button
+          className="lg:hidden text-white text-xl"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          ☰
+        </button>
+
+        {/* Nav links desktop */}
+        <div className="hidden lg:flex items-center space-x-8">
+          <Link href="/" className="hover:text-gray-400 text-sm">Home</Link>
+          <Link href="/about" className="hover:text-gray-400 text-sm">About Us</Link>
+          <Link href="/files" className="hover:text-gray-400 text-sm">Files</Link>
         </div>
-        <div className="self-start sm:self-auto">
+
+        {/* Wallet Connect */}
+        <div className="hidden lg:block">
           {mounted && <ConnectButton />}
         </div>
       </nav>
+
+      {/* Mobile dropdown */}
+      {menuOpen && (
+  <div className="absolute right-0 top-16 bg-black w-60 py-4 px-6 flex flex-col items-end space-y-4 shadow-lg rounded-bl-xl z-50 lg:hidden">
+    <Link href="/" onClick={() => setMenuOpen(false)} className="hover:text-gray-400">Home</Link>
+    <Link href="/about" onClick={() => setMenuOpen(false)} className="hover:text-gray-400">About Us</Link>
+    <Link href="/files" onClick={() => setMenuOpen(false)} className="hover:text-gray-400">Files</Link>
+    {mounted && <ConnectButton />}
+  </div>
+)}
 
       {/* Hero Section */}
       <main className="flex-1 flex flex-col items-center text-center px-4 sm:px-6 z-10 mt-12 sm:mt-20 md:mt-28">
