@@ -88,6 +88,15 @@ Privacidad total. Cero backend. Todo en cadena.
 
 ```
 
+## 🧑‍💻 Integrantes del equipo
+
+- 🎥 **Sharon Melissa Buelvas Lambertinez**
+- 💻 **Miller David Quintero Rodelo**  
+- 💻 **Jorge Eliecer Avila Lopez**
+- 💻 **Keyner Peña Torres** 
+
+---
+
 ## 🧪 Requisitos
 
 - Tener **Base Sepolia** en tu wallet (`Chain ID: 84532`)
