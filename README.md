@@ -105,9 +105,9 @@ Privacidad total. Cero backend. Todo en cadena.
 
 ---
 
-## 🏁 Participación en Hackathon
+## 🏁 Participación en Buildathon
 
-Este proyecto fue desarrollado para el hackathon **Base Batch LatAm 2025**.  
+Este proyecto fue desarrollado para el Buildathon **Base Batch LatAm 2025**.  
 Integra todas las herramientas recomendadas por Base:
 
 - ✅ **Smart Wallet**
